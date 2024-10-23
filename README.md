@@ -1,0 +1,1 @@
+Netflix like web app with  the power of chatGPT
