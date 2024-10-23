@@ -1,14 +1,23 @@
 import { useState } from "react";
 import ValidateInput from "../utils/Validation";
+import {  createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import auth from "../utils/FirebaseAuth";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../Hooks";
+import { addUser } from "../utils/UserSlice";
  
 interface FormData {
+    name : string;
     email: string;
     password: string;
   }
 
  const LoginCard :React.FC = () => {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const [isSignIn ,setIsSignIn] = useState(true)
     const [formData , setFormData] = useState<FormData>({
+        name: "",
         email : "",
         password : "",
     })
@@ -21,8 +30,8 @@ interface FormData {
        })
     }
 
-    function handleClick(){
-         const result = ValidateInput.safeParse(formData);
+  async  function  handleClick(){
+         const result =  ValidateInput.safeParse(formData);
          if (!result.success) {
             // If validation fails, map errors to the state
             const zodErrors = result.error.format();
@@ -36,9 +45,60 @@ interface FormData {
             // If validation passes, clear errors and proceed with form submission
             setErrors({});
             // Handle form submission logic here (e.g., send data to server)
-            console.log("Form submitted:", formData);
-          }
-    }
+            // ------ FOR SIGNUP 
+                if(!isSignIn){
+                    await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+                        .then((userCredential) => {
+                        // Signed up 
+                        const user = userCredential.user;
+                       //update user profile below
+                       updateProfile(user, {
+                            displayName: formData.name, 
+                            photoURL: "https://example.com/jane-q-user/profile.jpg"
+                      }).then(() => {
+                        // Profile updated!
+                        const {uid, displayName, email, photoURL} = auth.currentUser || {};
+    
+                        dispatch(addUser({
+                          uid:uid,
+                          email:email, 
+                          displayName:displayName, 
+                          photoURL:photoURL
+                        }))
+                        navigate('/browse');
+                      }).catch((error) => {
+                        // An error occurred
+                        console.log(error);
+                        
+                      });
+                       
+                        // ...
+                        })
+                        .catch((error) => {
+                        const errorCode = error.code;
+                       // const errorMessage = error.message;
+                        // ..
+                        setErrors(errorCode);
+                        });
+                }
+                else {
+                    await signInWithEmailAndPassword(auth, formData.email, formData.password)
+                          .then((userCredential) => {
+                // Signed in 
+                        const user = userCredential.user;
+                        console.log(user);
+                        navigate('/browse')
+                        // ...
+                    })
+            .catch((error) => {
+                const errorCode = error.code;
+               // const errorMessage = error.message;
+                setErrors(errorCode);
+            });
+            }
+            
+        }
+        }
     function toggleSignIn(){
      setIsSignIn(!isSignIn);
     }
@@ -53,7 +113,10 @@ interface FormData {
                 {!isSignIn && 
                 <input 
                     className="m-2 px-4 py-2 w-auto rounded-md bg-slate-300 text-white" 
-                    type="text" 
+                    type="text"
+                    name ="name" 
+                    value={formData.name}
+                    onChange={handleChange}
                     placeholder="Name"/>}
                 <input 
                  className="m-2 px-6 py-2 w-auto rounded-md bg-slate-300"
