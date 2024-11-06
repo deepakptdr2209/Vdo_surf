@@ -11,7 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
-FirebaseAuth.tsx
+# Secrets
+src/utils/FirebaseAuth.tsx
+src/utils/constants.ts
 .firebase
 # Editor directories and files
 .vscode/*

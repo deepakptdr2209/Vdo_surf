@@ -45,16 +45,16 @@ const dispatch = useAppDispatch()
   });
  }
   return (
-    <div className='absolute  w-screen bg-gradient-to-b from-black/50 via-black/30 to-transparent z-10 overflow-x-hidden '>
-      <div className="flex fixed top-0 left-0 right-0 justify-between px-16 py-2 mx-4">
+    <div className='absolute  w-screen bg-gradient-to-b from-black/50 via-black/30 to-transparent z-10  '>
+      <div className="flex top-0 left-0 right-0 justify-between px-16 py-2 mx-4">
           <img 
             className='w-44 h-28 pb-4'
             src="https://loodibee.com/wp-content/uploads/Netflix-logo.png" 
             alt="logo" />
             { user && 
-              <div className="relative flex flex-row justify-around w-16 h-16 pr-5 mx-5">
-              
-              <img className="m-2 p-1" 
+              <div className="relative flex flex-row justify-around w-16 h-16 px-12 mx-5">
+             
+              <img className="m-2 p-2" 
               // @ts-expect-error
                src={user.photoURL} 
                 alt="user-icon" />

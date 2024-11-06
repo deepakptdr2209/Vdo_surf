@@ -12,10 +12,10 @@ export const useTrailerVideo = (movieId) => {
                                 +'/videos?language=en-US',
                                 API_OPTIONS)
         const json = await data.json(); 
-        console.log(json);
+     //   console.log(json);
        const filterTrailerData = json.results.filter((video)=>video.type ==="Trailer");
        const trailer = filterTrailerData.length ? filterTrailerData[0] : json.results[0];
-       console.log(trailer);
+      // console.log(trailer);
       // setTrailer(trailer.key);
       dispatch(addTrailer(trailer))
        

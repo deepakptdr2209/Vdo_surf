@@ -16,7 +16,7 @@ import  Browse  from './Browse'
       }
     ]);
     return (
-    <div>
+    <div className='overflow-visible'>
       <RouterProvider router={router}/>
     </div>
     )

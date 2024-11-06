@@ -12,7 +12,7 @@ export const MainContainer = () => {
     const movie = useAppSelector(store=>store.movies?.nowPlaying) as VideoProps[] | undefined | null;
     if(!movie)return null;
     const mainMovie = movie[1];
-    console.log(mainMovie);
+   // console.log(mainMovie);
     const {original_title  , overview , id: movieId} = mainMovie as VideoProps & {id : string} ;
    
   return (

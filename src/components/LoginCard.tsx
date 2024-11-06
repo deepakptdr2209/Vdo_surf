@@ -83,10 +83,10 @@ interface FormData {
                 }
                 else {
                     await signInWithEmailAndPassword(auth, formData.email, formData.password)
-                          .then((userCredential) => {
+                          .then(() => {
                 // Signed in 
-                        const user = userCredential.user;
-                        console.log(user);
+                        // const user = userCredential.user;
+                       
                         navigate('/browse')
                         // ...
                     })
